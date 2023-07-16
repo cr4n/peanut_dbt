@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: INTERVIEW
+    database: INTERVIEW_ANALYTICS_RODRIGO
+    schema: PUBLIC
+    tables:
+      - name: COMMENTS
+      - name: POSTS
+      - name: PROFILE_STATS
+      - name: TIME_ZONE
+      - name: USERS
+      - name: USERS_GEOGRAPHY
+      - name: USER_SESSIONS
+

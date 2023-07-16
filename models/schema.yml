@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: dim_profile_stats
+  - name: dim_time_zone
+  - name: dim_users
+
+  - name: fct_content_generators
+  - name: fct_daily_active_users
+  - name: fct_first_post
+  - name: fct_monthly_active_users
+  - name: fct_posts
+  - name: fct_user_sessions
+
+  - name: agg_content_generators
+  - name: agg_daily_active_users
+  - name: agg_monthly_active_users
+  - name: agg_first_post
+  - name: agg_first_post_country
+  - name: agg_post_creation
