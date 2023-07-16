@@ -28,4 +28,5 @@ SELECT
     AVG(DATEDIFF('minute', u.onboarding_completed_at, p.first_post_at)) AS avg_minutes_to_first_post
 FROM users AS u
 INNER JOIN posts AS p ON u.user_id = p.user_id -- filters only UGC users
+WHERE u.onboarding_completed_at < p.first_post_at -- removes those that posted before onboarding
 GROUP BY 1, 2, 3, 4, 5 

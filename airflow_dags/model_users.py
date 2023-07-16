@@ -9,7 +9,7 @@ default_args = {
     'start_date': datetime(2023, 7, 14),
     'retries': 3,
     'retry_delay': timedelta(minutes=5),
-    'schedule_interval': '@daily'
+    'schedule_interval': '0 0 * * *'
 }
 
 dag = DAG(
@@ -29,6 +29,11 @@ end = DummyOperator(
     dag=dag
 )
 
+dimensions_finished = DummyOperator(
+    task_id='dimensions_finished',
+    dag=dag
+)
+
 # Dimension table for Users
 dim_users = dbtRun('dim_users', dag)
 dim_time_zone = dbtRun('dim_time_zone', dag)
@@ -42,7 +47,6 @@ agg_daily_active_users = dbtRun('agg_daily_active_users', dag)
 agg_monthly_active_users = dbtRun('agg_monthly_active_users', dag)
 
 # Task dependencies
-start >> [dim_time_zone, dim_profile_stats, dim_users, fct_user_sessions]
-fct_user_sessions >> fct_daily_active_users >> agg_daily_active_users >> end
+start >> [dim_time_zone, dim_profile_stats, dim_users] >> dimensions_finished >> end
+start >> fct_user_sessions >> fct_daily_active_users >> agg_daily_active_users >> end
 fct_daily_active_users >> fct_monthly_active_users  >> agg_monthly_active_users >> end
-[dim_time_zone, dim_profile_stats, dim_users] >> end
