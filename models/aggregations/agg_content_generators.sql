@@ -1,6 +1,4 @@
-{{ config(
-    materialized="view"
- ) }}
+{{ config(materialized="table") }}
 
 -- Other contents can be added easily to this model
 WITH dau AS (

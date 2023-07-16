@@ -1,13 +1,28 @@
-{{ config(
-    materialized="view"
- ) }}
+{{ config(materialized="view") }}
+
+WITH user_activity AS (
+    SELECT DISTINCT
+        user_id,
+        DATE_TRUNC('DAY', created_at) AS day
+    FROM 
+        {{ ref('fct_daily_active_users') }} 
+),
+
+user_activity_28days AS (
+    SELECT
+        user_id,
+        day,
+        COUNT(*) OVER (
+            PARTITION BY user_id 
+            ORDER BY day
+            ROWS BETWEEN 27 PRECEDING AND CURRENT ROW
+        ) AS active_days_in_last_28
+    FROM
+        user_activity
+)
 
 SELECT 
-    user_id,
-    DATE_TRUNC('month', created_at) AS created_at,
-    COUNT(*) AS active_days
-FROM 
-    {{ ref('fct_daily_active_users') }}
-WHERE 
-    DATEADD(day, -28, CURRENT_DATE) <= created_at
-GROUP BY 1, 2
+    DATE_TRUNC('MONTH', day) AS created_at,
+    user_id
+FROM user_activity_28days
+WHERE active_days_in_last_28 > 0

@@ -1,6 +1,4 @@
-{{ config(
-    materialized="view"
- ) }}
+{{ config(materialized="view") }}
 
 SELECT 
     uid AS user_id,

@@ -1,6 +1,4 @@
-{{ config(
-    materialized="table"
-) }}
+{{ config(materialized="table") }}
 
 SELECT
     DATE_TRUNC('MONTH', created_at) created_at,

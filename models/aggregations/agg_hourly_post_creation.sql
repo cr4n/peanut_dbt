@@ -1,6 +1,4 @@
-{{ config(
-    materialized="view"
- ) }}
+{{ config(materialized="table") }}
 
 SELECT 
        DATE_TRUNC('Day', created_at) AS created_at,
